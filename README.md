@@ -8,6 +8,8 @@
 
 PHP 8 · MySQL / MariaDB · HTML + JavaScript sans framework · aucune dépendance à installer
 
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 </div>
 
 ---
@@ -26,6 +28,7 @@ PHP 8 · MySQL / MariaDB · HTML + JavaScript sans framework · aucune dépendan
 - [Configuration](#configuration)
 - [Comment ça marche](#comment-ça-marche)
 - [Structure du projet](#structure-du-projet)
+- [Licence](#licence)
 
 ## Fonctionnalités
 
@@ -141,6 +144,12 @@ mcn-planning/
 └── logo.png
 docs/captures/                 Captures d'écran du README
 ```
+
+## Licence
+
+Le code est publié sous **licence MIT** (voir [LICENSE](LICENSE)) : vous pouvez l'utiliser, le modifier et le redistribuer librement, y compris pour un usage commercial, à condition de conserver la mention de copyright. Il est fourni « tel quel », sans garantie.
+
+Le nom **« MCN Daloa »** et son **logo** ne font pas partie de cette licence : si vous réutilisez l'application, remplacez-les par les vôtres.
 
 ---
 
