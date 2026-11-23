@@ -1,0 +1,26 @@
+# Identifiants et empreinte du mot de passe : JAMAIS sur GitHub
+config.local.php
+mcn-config.php
+**/config.local.php
+
+# Compteur anti-devinette (genere sur le serveur)
+.ht-essais.php
+**/.ht-essais.php
+
+# Copie de travail pour l'hebergeur (contient config.local.php)
+en-ligne/
+
+# Scripts de deploiement prives (serveur, compte)
+deploy/
+
+# Anciennes versions et documents internes
+emploi-du-temps.html
+*.pdf
+
+# Systeme / editeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log

@@ -1,0 +1,32 @@
+# MCN Daloa — Emploi du temps (hebergement LWS / Apache / LiteSpeed)
+
+DirectoryIndex index.php
+Options -Indexes
+
+# Toujours en HTTPS (a activer une fois le certificat SSL installe :
+# retirer les # des 6 lignes ci-dessous)
+#<IfModule mod_rewrite.c>
+#  RewriteEngine On
+#  RewriteCond %{HTTPS} !=on
+#  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+#  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#</IfModule>
+
+# Fichiers jamais servis directement : la page passe par index.php (mot de passe),
+# les identifiants et le script SQL restent prives.
+<FilesMatch "^(index\.html|config\.php|config\.local.*\.php|database.*\.sql|.*\.md|\.ht.*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
