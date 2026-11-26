@@ -3117,7 +3117,109 @@
     .sb-scroll::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 8px; border: 2px solid var(--surface); }
     .sb-scroll::-webkit-scrollbar-thumb:hover { background: var(--blue-400); }
     .sb-scroll { scrollbar-width: thin; scrollbar-color: var(--gray-300) transparent; }
+
+    /* ============================================================
+       CATÉGORIES — groupes (Travail / Domestique / Autres),
+       catégories personnalisées, fenêtre de gestion
+       ============================================================ */
+    .filters.grouped { flex-direction: column; align-items: stretch; gap: 10px; }
+    .filter-group { display: flex; flex-direction: column; gap: 7px; }
+    .filter-group-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .filter-group-head, .nl-group-head {
+      align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+      color: var(--gray-500); padding: 3px 8px; margin-left: -4px; border-radius: 6px;
+      border: 1.5px solid transparent; transition: all var(--t-fast);
+    }
+    .filter-group-head:hover, .nl-group-head:hover { color: var(--bi-700); background: var(--blue-50); }
+    .filter-group-head.active, .nl-group-head.active { color: var(--bi-700); border-color: var(--blue-300); background: var(--blue-50); }
+    .filters.grouped > .filter-chip[data-filter="all"] { align-self: flex-start; }
+    .nl-filters.grouped { flex-direction: column; gap: 8px; }
+    .nl-filters.grouped .nl-row-chips { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+    .nl-filters.grouped .nl-group { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+    .nl-filter::before { content: ''; display: none; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+    .nl-filter.commande::before, .nl-filter.cheque::before, .nl-filter.rendezvous::before, .nl-filter.autre::before { display: inline-block; }
+    .nl-filter.commande::before { background: var(--c-commande); }
+    .nl-filter.cheque::before { background: var(--c-cheque); }
+    .nl-filter.rendezvous::before { background: var(--c-rendezvous); }
+    .nl-filter.autre::before { background: var(--c-autre); }
+    .nl-filter.active::before { background: rgba(255, 255, 255, .9) !important; }
+    .sb-manage-cats { font-size: 12.5px; padding: 8px 12px; justify-content: center; }
+
+    .tp-group + .tp-group { margin-top: 12px; }
+    .tp-group-title {
+      font-size: 10.5px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase;
+      color: var(--gray-500); margin-bottom: 7px;
+    }
+    .tp-empty { grid-column: 1 / -1; font-size: 12.5px; color: var(--gray-400); padding: 4px 2px; }
+    .type-option { text-align: left; overflow-wrap: anywhere; }
+
+    .newcat {
+      margin-top: 12px; padding: 14px; border-radius: var(--r-sm);
+      border: 1.5px dashed var(--c-autre); background: var(--amber-100);
+      animation: slideUp .25s ease;
+    }
+    .newcat[hidden] { display: none; }
+    .newcat-title { font-size: 12px; font-weight: 800; color: var(--c-autre-dark); margin-bottom: 9px; letter-spacing: .3px; }
+    .newcat-title span { font-weight: 600; color: var(--gray-500); }
+    .cat-form-row { display: grid; grid-template-columns: 1fr 150px; gap: 9px; }
+    .cat-form-row input, .cat-form-row select, .cat-row input, .cat-row select {
+      width: 100%; padding: 9px 11px; border: 1.5px solid var(--gray-200); border-radius: var(--r-sm);
+      font: inherit; font-size: 13.5px; color: var(--ink); background: var(--surface);
+    }
+    .cat-form-row input:focus, .cat-form-row select:focus, .cat-row input:focus, .cat-row select:focus {
+      outline: none; border-color: var(--bi-500); box-shadow: var(--shadow-blue-glow);
+    }
+    .swatches { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .swatch {
+      width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--surface);
+      box-shadow: 0 0 0 1.5px var(--gray-200); transition: transform var(--t-fast), box-shadow var(--t-fast);
+    }
+    .swatch:hover { transform: scale(1.12); }
+    .swatch.active { box-shadow: 0 0 0 2.5px var(--ink); }
+    .swatches.mini { margin-top: 0; gap: 5px; }
+    .swatches.mini .swatch { width: 18px; height: 18px; }
+    .newcat-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .newcat-actions .field-hint { margin: 0; flex: 1; min-width: 180px; }
+    .link-btn {
+      margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--bi-600);
+      padding: 4px 2px; border-radius: 6px;
+    }
+    .link-btn:hover { color: var(--bi-800); text-decoration: underline; }
+
+    .cats-add { padding: 14px; border-radius: var(--r-sm); background: var(--blue-50); border: 1px solid var(--blue-100); margin-bottom: 18px; }
+    .cats-group + .cats-group { margin-top: 16px; }
+    .cats-group-title {
+      display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800;
+      letter-spacing: 1.4px; text-transform: uppercase; color: var(--bi-700);
+      padding-bottom: 7px; border-bottom: 1.5px solid var(--gray-200); margin-bottom: 8px;
+    }
+    .cats-group-title span { color: var(--gray-400); font-weight: 600; letter-spacing: .5px; }
+    .cat-row {
+      display: grid; grid-template-columns: 14px minmax(0, 1fr) 150px 70px 38px;
+      align-items: center; gap: 9px; padding: 7px 0;
+    }
+    .cat-row + .cat-row { border-top: 1px dashed var(--gray-200); }
+    .cat-row.base { grid-template-columns: 14px minmax(0, 1fr) auto 70px; }
+    .cat-row .swatches { grid-column: 2 / -1; grid-row: 2; }
+    .cat-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .cat-name { font-weight: 700; font-size: 14px; color: var(--ink); }
+    .cat-lock { font-size: 11.5px; color: var(--gray-400); white-space: nowrap; }
+    .cat-count { font-size: 11.5px; color: var(--gray-500); font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+    .cat-del { width: 34px; height: 34px; padding: 0; justify-content: center; }
+    .cats-empty { font-size: 13px; color: var(--gray-400); padding: 6px 0; }
+    @media (max-width: 640px) {
+      .cat-form-row { grid-template-columns: 1fr; }
+      .cat-row { grid-template-columns: 14px minmax(0, 1fr) 38px; }
+      .cat-row select { grid-column: 2 / 3; grid-row: 2; }
+      .cat-row .swatches { grid-column: 2 / 3; grid-row: 3; }
+      .cat-row .cat-count { grid-column: 2 / 3; grid-row: 4; text-align: left; }
+      .cat-row .cat-del { grid-column: 3; grid-row: 1; }
+      .cat-row.base { grid-template-columns: 14px minmax(0, 1fr) auto; }
+      .cat-row.base .cat-lock { display: none; }
+    }
   </style>
+  <style id="cat-styles"></style>
 </head>
 
 <body>
@@ -3188,13 +3290,8 @@
         <section class="sb-sec" data-sec="filtres">
           <button class="sb-sec-head" type="button" title="Filtres"><span class="sb-ic">🔖</span><span class="sb-txt">Filtres</span><span class="sb-chev" aria-hidden="true">⌄</span></button>
           <div class="sb-sec-body">
-            <div class="filters">
-              <button class="filter-chip active" data-filter="all">Toutes</button>
-              <button class="filter-chip commande" data-filter="commande">Commande</button>
-              <button class="filter-chip cheque" data-filter="cheque">Chèque</button>
-              <button class="filter-chip rendezvous" data-filter="rendezvous">Rendez-vous</button>
-              <button class="filter-chip autre" data-filter="autre">Autre</button>
-            </div>
+            <div class="filters grouped" id="filters" role="group" aria-label="Filtrer par catégorie"></div>
+            <button class="btn btn-outline sb-manage-cats" type="button" onclick="openCatsManager()">⚙ Gérer les catégories</button>
           </div>
         </section>
 
@@ -3281,14 +3378,7 @@
           <input type="text" id="nl-search" class="nl-search" placeholder="Rechercher par mot-clé (titre ou contenu)..."
             oninput="setNotesListSearch(this.value)">
         </div>
-        <div class="nl-filters" id="nl-filters">
-          <button class="nl-filter active" data-f="all" onclick="setNotesListFilter('all', this)">Toutes</button>
-          <button class="nl-filter" data-f="commande" onclick="setNotesListFilter('commande', this)">Commande</button>
-          <button class="nl-filter" data-f="cheque" onclick="setNotesListFilter('cheque', this)">Chèque</button>
-          <button class="nl-filter" data-f="rendezvous"
-            onclick="setNotesListFilter('rendezvous', this)">Rendez-vous</button>
-          <button class="nl-filter" data-f="autre" onclick="setNotesListFilter('autre', this)">Autre</button>
-        </div>
+        <div class="nl-filters grouped" id="nl-filters" role="group" aria-label="Filtrer par catégorie"></div>
         <div class="nl-stats" id="nl-stats"></div>
         <div id="nl-body"></div>
       </div>
@@ -3321,17 +3411,22 @@
       <div class="modal-body">
         <div class="form-error" id="note-error"></div>
         <div class="form-field">
-          <label>Type de note</label>
-          <div class="type-picker">
-            <button type="button" class="type-option commande active" data-type="commande"
-              onclick="selectNoteType('commande')">Commande</button>
-            <button type="button" class="type-option cheque" data-type="cheque"
-              onclick="selectNoteType('cheque')">Chèque</button>
-            <button type="button" class="type-option rendezvous" data-type="rendezvous"
-              onclick="selectNoteType('rendezvous')">Rendez-vous</button>
-            <button type="button" class="type-option autre" data-type="autre"
-              onclick="selectNoteType('autre')">Autre</button>
+          <label>Catégorie</label>
+          <div id="type-picker-wrap"></div>
+          <div class="newcat" id="newcat" hidden>
+            <div class="newcat-title">Nouvelle catégorie <span>(facultatif)</span></div>
+            <div class="cat-form-row">
+              <input type="text" id="newcat-nom" maxlength="40" autocomplete="off"
+                placeholder="Nom : Facture, Courses, École…" aria-label="Nom de la nouvelle catégorie">
+              <select id="newcat-groupe" aria-label="Groupe de la nouvelle catégorie"></select>
+            </div>
+            <div class="swatches" id="newcat-colors" role="radiogroup" aria-label="Couleur"></div>
+            <div class="newcat-actions">
+              <button type="button" class="btn btn-primary btn-sm" onclick="createCategoryFromForm('newcat')">＋ Ajouter la catégorie</button>
+              <span class="field-hint">Elle restera dans la liste pour vos prochaines notes. Laissez vide pour une simple note « Autre ».</span>
+            </div>
           </div>
+          <button type="button" class="link-btn" onclick="openCatsManager()">⚙ Gérer les catégories (modifier, supprimer)</button>
         </div>
         <div class="form-field">
           <label>Note</label>
@@ -3370,6 +3465,38 @@
         <div class="form-actions">
           <button class="btn btn-outline" onclick="closeModal('modal-note')">Annuler</button>
           <button class="btn btn-primary" onclick="saveNote()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE GESTION DES CATÉGORIES -->
+  <div class="modal-overlay" id="modal-cats">
+    <div class="modal wide">
+      <div class="modal-header">
+        <div class="modal-eyebrow">Réglages</div>
+        <h2 class="modal-title">Catégories</h2>
+        <div class="modal-sub">Rangées par Travail, Domestique et Autres</div>
+        <button class="modal-close" onclick="closeModal('modal-cats')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-error" id="cats-error"></div>
+        <div class="cats-add">
+          <div class="newcat-title" style="color:var(--bi-700)">Ajouter une catégorie</div>
+          <div class="cat-form-row">
+            <input type="text" id="addcat-nom" maxlength="40" autocomplete="off"
+              placeholder="Nom de la catégorie" aria-label="Nom de la catégorie"
+              onkeydown="if (event.key === 'Enter') createCategoryFromForm('addcat')">
+            <select id="addcat-groupe" aria-label="Groupe"></select>
+          </div>
+          <div class="swatches" id="addcat-colors" role="radiogroup" aria-label="Couleur"></div>
+          <div class="newcat-actions">
+            <button type="button" class="btn btn-primary btn-sm" onclick="createCategoryFromForm('addcat')">＋ Ajouter</button>
+          </div>
+        </div>
+        <div id="cats-body"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="closeModal('modal-cats')">Terminé</button>
         </div>
       </div>
     </div>
@@ -3436,15 +3563,56 @@
     const API_URL = 'api.php';
     let serverOnline = false;   // true des que la base repond
 
-    const NOTE_TYPES = {
-      commande: { label: 'Commande' },
-      cheque: { label: 'Chèque' },
-      rendezvous: { label: 'Rendez-vous' },
-      autre: { label: 'Autre' }
+    /* ============================================================
+       CATÉGORIES
+       . 4 catégories de base (Commande, Chèque, Rendez-vous, Autre).
+       . Choisir « Autre » permet d'écrire une NOUVELLE catégorie :
+         elle est enregistrée dans la base et reste dans la liste.
+       . Chaque catégorie est rangée dans un groupe : Travail,
+         Domestique ou Autres (tri des filtres et du choix).
+       . Les catégories personnalisées ont un id « cat_xxxxxxxx » :
+         il sert aussi de classe CSS (couleur), d'où le contrôle strict.
+       ============================================================ */
+    const GROUPES = [
+      { id: 'travail', label: 'Travail', icon: '💼' },
+      { id: 'domestique', label: 'Domestique', icon: '🏠' },
+      { id: 'autres', label: 'Autres', icon: '🗂️' }
+    ];
+    const BASE_TYPES = {
+      commande: { label: 'Commande', groupe: 'travail', couleur: 'var(--c-commande)' },
+      cheque: { label: 'Chèque', groupe: 'travail', couleur: 'var(--c-cheque)' },
+      rendezvous: { label: 'Rendez-vous', groupe: 'travail', couleur: 'var(--c-rendezvous)' },
+      autre: { label: 'Autre', groupe: 'autres', couleur: 'var(--c-autre)' }
     };
+    /* Mêmes couleurs que COULEURS dans api.php. */
+    const PALETTE = [
+      { c: '#e11d48', d: '#9f1239', nom: 'Framboise' },
+      { c: '#ea580c', d: '#9a3412', nom: 'Orange' },
+      { c: '#ca8a04', d: '#854d0e', nom: 'Moutarde' },
+      { c: '#65a30d', d: '#3f6212', nom: 'Vert pomme' },
+      { c: '#0d9488', d: '#115e59', nom: 'Turquoise' },
+      { c: '#0891b2', d: '#155e75', nom: 'Bleu lagon' },
+      { c: '#4f46e5', d: '#3730a3', nom: 'Indigo' },
+      { c: '#c026d3', d: '#86198f', nom: 'Fuchsia' },
+      { c: '#db2777', d: '#9d174d', nom: 'Rose' },
+      { c: '#475569', d: '#1e293b', nom: 'Ardoise' }
+    ];
+    const CAT_ID_RE = /^cat_[a-z0-9]{6,12}$/;
+    const CAT_NOM_MAX = 40;
+    const CATEGORIES_MAX = 200;
+
+    function paletteOf(hex) { return PALETTE.find(p => p.c === hex) || PALETTE[PALETTE.length - 1]; }
+    function groupeOk(g) { return GROUPES.some(x => x.id === g) ? g : 'autres'; }
+    function cleanCatNom(v) { return String(v == null ? '' : v).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+    function validCat(c) {
+      return c && typeof c === 'object' && CAT_ID_RE.test(String(c.id)) && cleanCatNom(c.nom) !== '';
+    }
+    function normCat(c) {
+      return { id: String(c.id), nom: cleanCatNom(c.nom).slice(0, CAT_NOM_MAX), groupe: groupeOk(c.groupe), couleur: paletteOf(String(c.couleur).toLowerCase()).c };
+    }
 
     function getDefaultData() {
-      return { notes: [], base: null, notifEnabled: false };
+      return { notes: [], base: null, notifEnabled: false, categories: [], catBase: null };
     }
 
     function loadData() {
@@ -3454,6 +3622,8 @@
         const parsed = JSON.parse(raw);
         if (!Array.isArray(parsed.notes)) parsed.notes = [];
         if (!Array.isArray(parsed.base)) parsed.base = null;   // ancien format : pas de base connue
+        parsed.categories = Array.isArray(parsed.categories) ? parsed.categories.filter(validCat).map(normCat) : [];
+        if (!Array.isArray(parsed.catBase)) parsed.catBase = null;
         return parsed;
       } catch (e) {
         console.warn('Erreur chargement, réinitialisation', e);
@@ -3471,19 +3641,31 @@
     function setBase(list) { baseMap = new Map(list.map(n => [n.id, noteKey(n)])); }
     function baseAsList() { return Array.from(baseMap, ([id, k]) => ({ id, k })); }
 
+    /* Même principe pour les catégories personnalisées. */
+    let catBaseMap = new Map();
+    function catKey(c) { return JSON.stringify([c.nom, c.groupe, c.couleur]); }
+    function setCatBase(list) { catBaseMap = new Map(list.map(c => [c.id, catKey(c)])); }
+    function catListKey(list) { return list.map(c => c.id + ':' + catKey(c)).sort().join('|'); }
+
     function pendingChanges() {
-      const upsert = [], del = [];
-      const ids = new Set();
+      const upsert = [], del = [], catUp = [], catDel = [];
+      const ids = new Set(), cids = new Set();
       notes.forEach(n => { ids.add(n.id); if (baseMap.get(n.id) !== noteKey(n)) upsert.push(n); });
       baseMap.forEach((_, id) => { if (!ids.has(id)) del.push(id); });
-      return { upsert, del };
+      categories.forEach(c => { cids.add(c.id); if (catBaseMap.get(c.id) !== catKey(c)) catUp.push(c); });
+      catBaseMap.forEach((_, id) => { if (!cids.has(id)) catDel.push(id); });
+      return { upsert, del, catUp, catDel };
     }
-    function hasPending() { const p = pendingChanges(); return p.upsert.length > 0 || p.del.length > 0; }
+    function hasPending() {
+      const p = pendingChanges();
+      return p.upsert.length > 0 || p.del.length > 0 || p.catUp.length > 0 || p.catDel.length > 0;
+    }
 
     function saveLocal() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          notes, base: baseAsList(), notifEnabled: state.notifEnabled
+          notes, base: baseAsList(), notifEnabled: state.notifEnabled,
+          categories, catBase: Array.from(catBaseMap, ([id, k]) => ({ id, k }))
         }));
       } catch (e) { console.warn('Erreur sauvegarde locale', e); }
     }
@@ -3514,14 +3696,15 @@
     /* Envoie au serveur les notes modifiees / supprimees depuis le dernier envoi. */
     function pushToServer() {
       if (pushing) { pushAgain = true; return pushing; }
-      const { upsert, del } = pendingChanges();
-      if (!upsert.length && !del.length) { updateSaveState(); return Promise.resolve(true); }
+      const { upsert, del, catUp, catDel } = pendingChanges();
+      if (!upsert.length && !del.length && !catUp.length && !catDel.length) { updateSaveState(); return Promise.resolve(true); }
       const sent = new Map(upsert.map(n => [n.id, noteKey(n)]));
+      const sentCats = new Map(catUp.map(c => [c.id, catKey(c)]));
       updateSaveState('saving');
       pushing = fetch(API_URL + '?action=sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ upsert, delete: del }),
+        body: JSON.stringify({ upsert, delete: del, cat_upsert: catUp, cat_delete: catDel }),
         keepalive: true
       })
         .then(r => {
@@ -3534,6 +3717,8 @@
           // ce qui a ete envoye est maintenant l'etat confirme
           sent.forEach((k, id) => baseMap.set(id, k));
           del.forEach(id => baseMap.delete(id));
+          sentCats.forEach((k, id) => catBaseMap.set(id, k));
+          catDel.forEach(id => catBaseMap.delete(id));
           setServerStatus(true);
           saveLocal();
           return true;
@@ -3568,13 +3753,18 @@
         setServerStatus(true);
         if (hasPending() || pushing) return;          // saisie pendant la lecture : on reessaiera
         const changed = noteListKey(notes) !== noteListKey(data.notes);
+        const newCats = Array.isArray(data.categories) ? data.categories.filter(validCat).map(normCat) : categories;
+        const catsChanged = catListKey(categories) !== catListKey(newCats);
         notes = data.notes;
         setBase(notes);
+        categories = newCats;
+        setCatBase(categories);
+        if (catsChanged) applyCategories();
         saveLocal();
         const first = !firstSyncDone;
         firstSyncDone = true;
         if (first) applyRappels();                     // reporte les rappels en retard
-        if (changed || first) {
+        if (changed || catsChanged || first) {
           refreshViews();
           if (typeof window.renderIntroToday === 'function') window.renderIntroToday();   // écran d'accueil à jour
         }
@@ -3629,6 +3819,9 @@
     let notes = _saved.notes;
     if (_saved.base) baseMap = new Map(_saved.base.map(x => [x.id, x.k]));
     else setBase(notes);      // ancien cache : on le considere deja enregistre (pas de renvoi en masse)
+    let categories = Array.isArray(_saved.categories) ? _saved.categories : [];
+    if (_saved.catBase) catBaseMap = new Map(_saved.catBase.map(x => [x.id, x.k]));
+    else setCatBase(categories);
 
     let state = {
       currentDate: new Date(),
@@ -3642,6 +3835,328 @@
     let rappelInputOn = false;
     let notesListFilter = 'all';
     let notesListSearch = '';
+
+    /* ============================================================
+       CATÉGORIES — affichage, création, modification, suppression
+       ============================================================ */
+    let catById = new Map();
+
+    /* Infos d'affichage d'un type de note (catégorie inconnue → « Autre »). */
+    function typeInfo(type) {
+      const b = BASE_TYPES[type];
+      if (b) return { id: type, label: b.label, groupe: b.groupe, couleur: b.couleur, base: true };
+      const c = catById.get(type);
+      if (c) return { id: c.id, label: c.nom, groupe: c.groupe, couleur: c.couleur, base: false };
+      return typeInfo('autre');
+    }
+    /* Catégories d'un groupe : celles de base d'abord, puis les personnalisées (A→Z),
+       « Autre » toujours en dernier (c'est lui qui permet d'en créer une nouvelle). */
+    function typesOfGroup(g) {
+      const base = Object.keys(BASE_TYPES).filter(k => k !== 'autre' && BASE_TYPES[k].groupe === g).map(typeInfo);
+      const perso = categories.filter(c => c.groupe === g)
+        .sort((a, b) => a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }))
+        .map(c => typeInfo(c.id));
+      const list = base.concat(perso);
+      if (g === BASE_TYPES.autre.groupe) list.push(typeInfo('autre'));
+      return list;
+    }
+    function groupeLabel(g) { const x = GROUPES.find(y => y.id === g); return x ? x.label : 'Autres'; }
+    function matchFilter(n, f) {
+      if (!f || f === 'all') return true;
+      const t = typeInfo(n.type);
+      if (f.startsWith('g:')) return t.groupe === f.slice(2);
+      return t.id === f;
+    }
+    function filterExists(f) {
+      if (f === 'all') return true;
+      if (f.startsWith('g:')) return GROUPES.some(g => 'g:' + g.id === f);
+      return !!BASE_TYPES[f] || catById.has(f);
+    }
+    function filterLabel(f) {
+      if (f === 'all') return 'Toutes';
+      if (f.startsWith('g:')) return groupeLabel(f.slice(2));
+      return typeInfo(f).label;
+    }
+    function countNotesOfType(id) { return notes.filter(n => n.type === id).length; }
+    function sameNom(a, b) { return a.localeCompare(b, 'fr', { sensitivity: 'base' }) === 0; }
+    function findTypeByNom(nom, exceptId) {
+      for (const k in BASE_TYPES) if (sameNom(BASE_TYPES[k].label, nom)) return k;
+      const c = categories.find(x => x.id !== exceptId && sameNom(x.nom, nom));
+      return c ? c.id : null;
+    }
+    function newCatId() {
+      const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let id;
+      do {
+        const r = new Uint8Array(8);
+        (window.crypto || window.msCrypto).getRandomValues(r);
+        id = 'cat_' + Array.from(r, x => alphabet[x % alphabet.length]).join('');
+      } while (catById.has(id));
+      return id;
+    }
+
+    /* Styles de couleur des catégories personnalisées (id et couleur déjà vérifiés). */
+    function buildCatStyles() {
+      let css = '';
+      categories.forEach(c => {
+        if (!CAT_ID_RE.test(c.id)) return;
+        const p = paletteOf(c.couleur), C = p.c, D = p.d, i = c.id;
+        const S = `color-mix(in srgb, ${C} 15%, var(--surface))`;
+        const L = `color-mix(in srgb, ${C} 55%, #fff)`;
+        css += `.note-chip:where(.${i}){border-color:${C};color:${D};background:linear-gradient(135deg,${S},var(--surface))}`
+          + `.type-tag:where(.${i}){background:${S};color:${D}}`
+          + `:where(.day-note-card,.reminder-item,.nl-row).${i}{border-left-color:${C}}`
+          + `.filter-chip:where(.${i})::before,.type-option:where(.${i})::before,.nl-filter:where(.${i})::before{display:inline-block;background:${C}}`
+          + `.filter-chip:where(.${i}).active{background:linear-gradient(135deg,${C},${D});box-shadow:0 4px 12px color-mix(in srgb,${C} 35%,transparent)}`
+          + `.type-option:where(.${i}).active{border-color:${C};background:${S};color:${D}}`
+          + `.it-row:where(.${i}) .it-type{color:${D}}`
+          + `:where([data-theme="dark"]) .note-chip:where(.${i}),:where([data-theme="dark"]) .type-tag:where(.${i}),:where([data-theme="dark"]) .type-option:where(.${i}).active{color:${L}}\n`;
+      });
+      document.getElementById('cat-styles').textContent = css;
+    }
+
+    function swatchesHtml(selected, act) {
+      return PALETTE.map(p => `<button type="button" class="swatch${p.c === selected ? ' active' : ''}" data-act="${act}" data-color="${p.c}"`
+        + ` style="background:${p.c}" title="${p.nom}" aria-label="${p.nom}" role="radio" aria-checked="${p.c === selected}"></button>`).join('');
+    }
+    function groupOptionsHtml(selected) {
+      return GROUPES.map(g => `<option value="${g.id}"${g.id === selected ? ' selected' : ''}>${g.icon} ${g.label}</option>`).join('');
+    }
+    function nextFreeColor() {
+      const used = new Set(categories.map(c => c.couleur));
+      const p = PALETTE.find(x => !used.has(x.c));
+      return (p || PALETTE[categories.length % PALETTE.length]).c;
+    }
+
+    /* Formulaires « nouvelle catégorie » (dans la note : newcat, dans les réglages : addcat). */
+    const catForms = { newcat: { couleur: null }, addcat: { couleur: null } };
+    function resetCatForm(form, groupe) {
+      catForms[form].couleur = nextFreeColor();
+      document.getElementById(form + '-nom').value = '';
+      document.getElementById(form + '-groupe').innerHTML = groupOptionsHtml(groupeOk(groupe || 'autres'));
+      renderCatFormColors(form);
+    }
+    function renderCatFormColors(form) {
+      document.getElementById(form + '-colors').innerHTML = swatchesHtml(catForms[form].couleur, form + '-color');
+    }
+    ['newcat', 'addcat'].forEach(form => {
+      document.getElementById(form + '-colors').addEventListener('click', e => {
+        const b = e.target.closest('.swatch');
+        if (!b) return;
+        catForms[form].couleur = b.dataset.color;
+        renderCatFormColors(form);
+      });
+    });
+
+    /* Crée une catégorie. Renvoie { id } ou { error }. Un nom déjà pris renvoie la catégorie existante. */
+    function createCategory(nom, groupe, couleur) {
+      nom = cleanCatNom(nom);
+      if (!nom) return { error: 'Écrivez le nom de la catégorie.' };
+      if (nom.length > CAT_NOM_MAX) return { error: `Le nom est trop long (${CAT_NOM_MAX} caractères maximum).` };
+      const exist = findTypeByNom(nom);
+      if (exist) return { id: exist, existed: true };
+      if (categories.length >= CATEGORIES_MAX) return { error: 'Nombre maximum de catégories atteint.' };
+      const c = normCat({ id: newCatId(), nom, groupe, couleur });
+      categories.push(c);
+      saveData();
+      applyCategories();
+      refreshCatsManager();
+      refreshViews();
+      return { id: c.id };
+    }
+    window.createCategoryFromForm = function (form) {
+      const errEl = document.getElementById(form === 'newcat' ? 'note-error' : 'cats-error');
+      errEl.classList.remove('show');
+      const res = createCategory(
+        document.getElementById(form + '-nom').value,
+        document.getElementById(form + '-groupe').value,
+        catForms[form].couleur
+      );
+      if (res.error) { errEl.textContent = res.error; errEl.classList.add('show'); document.getElementById(form + '-nom').focus(); return null; }
+      const label = typeInfo(res.id).label;
+      toast(res.existed ? `« ${label} » existe déjà — sélectionnée` : `Catégorie « ${label} » ajoutée`);
+      if (form === 'newcat') selectNoteType(res.id);
+      else resetCatForm('addcat', document.getElementById('addcat-groupe').value);
+      return res.id;
+    };
+
+    function updateCategory(id, changes) {
+      const c = categories.find(x => x.id === id);
+      if (!c) return;
+      const err = document.getElementById('cats-error');
+      err.classList.remove('show');
+      if ('nom' in changes) {
+        const nom = cleanCatNom(changes.nom);
+        if (!nom || nom.length > CAT_NOM_MAX || findTypeByNom(nom, id)) {
+          err.textContent = !nom ? 'Le nom ne peut pas être vide.' : (nom.length > CAT_NOM_MAX ? 'Nom trop long.' : `Une catégorie « ${nom} » existe déjà.`);
+          err.classList.add('show');
+          renderCatsManager();
+          return;
+        }
+        changes.nom = nom;
+      }
+      Object.assign(c, normCat(Object.assign({}, c, changes)));
+      saveData();
+      applyCategories();
+      refreshCatsManager();
+      refreshViews();
+      toast('Catégorie modifiée');
+    }
+
+    function deleteCategory(id) {
+      const c = categories.find(x => x.id === id);
+      if (!c) return;
+      const nb = countNotesOfType(id);
+      const msg = `Supprimer la catégorie « ${c.nom} » ?`
+        + (nb ? `\n\n${nb} note${nb > 1 ? 's' : ''} passer${nb > 1 ? 'ont' : 'a'} dans « Autre » (elles ne sont pas effacées).` : '');
+      if (!confirm(msg)) return;
+      categories = categories.filter(x => x.id !== id);
+      notes.forEach(n => { if (n.type === id) n.type = 'autre'; });
+      if (state.filter === id) state.filter = 'all';
+      if (notesListFilter === id) notesListFilter = 'all';
+      if (selectedNoteType === id) selectedNoteType = 'autre';
+      saveData();
+      applyCategories();
+      refreshCatsManager();
+      refreshViews();
+      toast('Catégorie supprimée');
+    }
+
+    /* ---- Filtres (barre latérale + liste des notes), rangés par groupe ---- */
+    function renderFilters() {
+      const box = document.getElementById('filters');
+      if (!box) return;
+      let h = `<button class="filter-chip${state.filter === 'all' ? ' active' : ''}" data-filter="all">Toutes</button>`;
+      GROUPES.forEach(g => {
+        const types = typesOfGroup(g.id);
+        if (!types.length) return;
+        h += `<div class="filter-group"><button class="filter-group-head${state.filter === 'g:' + g.id ? ' active' : ''}" data-filter="g:${g.id}" title="Toutes les notes « ${g.label} »">${g.icon} ${g.label}</button>`
+          + `<div class="filter-group-chips">`
+          + types.map(t => `<button class="filter-chip ${t.id}${state.filter === t.id ? ' active' : ''}" data-filter="${t.id}">${escapeHtml(t.label)}</button>`).join('')
+          + `</div></div>`;
+      });
+      box.innerHTML = h;
+    }
+    document.getElementById('filters').addEventListener('click', e => {
+      const b = e.target.closest('[data-filter]');
+      if (!b) return;
+      state.filter = b.dataset.filter;
+      renderFilters();
+      renderCalendar();
+    });
+
+    function renderNlFilters() {
+      const box = document.getElementById('nl-filters');
+      if (!box) return;
+      const f = notesListFilter;
+      let h = `<div class="nl-group"><button class="nl-filter${f === 'all' ? ' active' : ''}" data-f="all">Toutes</button></div>`;
+      GROUPES.forEach(g => {
+        const types = typesOfGroup(g.id);
+        if (!types.length) return;
+        h += `<div class="nl-group"><button class="nl-group-head${f === 'g:' + g.id ? ' active' : ''}" data-f="g:${g.id}">${g.icon} ${g.label}</button>`
+          + types.map(t => `<button class="nl-filter ${t.id}${f === t.id ? ' active' : ''}" data-f="${t.id}">${escapeHtml(t.label)}</button>`).join('')
+          + `</div>`;
+      });
+      box.innerHTML = h;
+    }
+    document.getElementById('nl-filters').addEventListener('click', e => {
+      const b = e.target.closest('[data-f]');
+      if (b) setNotesListFilter(b.dataset.f);
+    });
+
+    /* ---- Choix de la catégorie dans la fenêtre « note » ---- */
+    function renderTypePicker() {
+      const wrap = document.getElementById('type-picker-wrap');
+      if (!wrap) return;
+      wrap.innerHTML = GROUPES.map(g => {
+        const btns = typesOfGroup(g.id).map(t =>
+          `<button type="button" class="type-option ${t.id}${t.id === selectedNoteType ? ' active' : ''}" data-type="${t.id}" aria-pressed="${t.id === selectedNoteType}">${escapeHtml(t.label)}</button>`).join('');
+        return `<div class="tp-group"><div class="tp-group-title">${g.icon} ${g.label}</div>`
+          + `<div class="type-picker">${btns || '<div class="tp-empty">Aucune catégorie pour l\'instant — choisissez « Autre » pour en créer une.</div>'}</div></div>`;
+      }).join('');
+    }
+    document.getElementById('type-picker-wrap').addEventListener('click', e => {
+      const b = e.target.closest('.type-option');
+      if (!b) return;
+      selectNoteType(b.dataset.type);
+      if (b.dataset.type === 'autre') setTimeout(() => document.getElementById('newcat-nom').focus(), 30);
+    });
+    document.getElementById('newcat-nom').addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); createCategoryFromForm('newcat'); }
+    });
+
+    /* ---- Fenêtre de gestion ---- */
+    function renderCatsManager() {
+      const body = document.getElementById('cats-body');
+      body.innerHTML = GROUPES.map(g => {
+        const types = typesOfGroup(g.id);
+        const rows = types.map(t => {
+          const nb = countNotesOfType(t.id);
+          const count = `<span class="cat-count">${nb} note${nb > 1 ? 's' : ''}</span>`;
+          if (t.base) {
+            return `<div class="cat-row base"><span class="cat-dot" style="background:${t.couleur}"></span>`
+              + `<span class="cat-name">${escapeHtml(t.label)}</span><span class="cat-lock">🔒 catégorie de base</span>${count}</div>`;
+          }
+          return `<div class="cat-row" data-id="${t.id}"><span class="cat-dot" style="background:${paletteOf(t.couleur).c}"></span>`
+            + `<input type="text" value="${escapeHtml(t.label)}" maxlength="${CAT_NOM_MAX}" data-act="nom" aria-label="Nom de la catégorie">`
+            + `<select data-act="groupe" aria-label="Groupe">${groupOptionsHtml(t.groupe)}</select>`
+            + `<div class="swatches mini" role="radiogroup" aria-label="Couleur">${swatchesHtml(t.couleur, 'couleur')}</div>`
+            + count
+            + `<button type="button" class="btn btn-danger btn-sm cat-del" data-act="del" title="Supprimer" aria-label="Supprimer la catégorie ${escapeHtml(t.label)}">🗑</button></div>`;
+        }).join('');
+        return `<div class="cats-group"><div class="cats-group-title">${g.icon} ${g.label} <span>· ${types.length}</span></div>`
+          + (rows || '<div class="cats-empty">Aucune catégorie dans ce groupe.</div>') + `</div>`;
+      }).join('');
+    }
+    (function () {
+      const body = document.getElementById('cats-body');
+      body.addEventListener('change', e => {
+        const row = e.target.closest('.cat-row[data-id]');
+        if (!row) return;
+        const act = e.target.dataset.act;
+        if (act === 'nom') updateCategory(row.dataset.id, { nom: e.target.value });
+        if (act === 'groupe') updateCategory(row.dataset.id, { groupe: e.target.value });
+      });
+      body.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.target.dataset.act === 'nom') e.target.blur();
+      });
+      body.addEventListener('click', e => {
+        const row = e.target.closest('.cat-row[data-id]');
+        const b = e.target.closest('[data-act]');
+        if (!row || !b) return;
+        if (b.dataset.act === 'couleur') updateCategory(row.dataset.id, { couleur: b.dataset.color });
+        if (b.dataset.act === 'del') deleteCategory(row.dataset.id);
+      });
+    })();
+    window.openCatsManager = function () {
+      document.getElementById('cats-error').classList.remove('show');
+      resetCatForm('addcat', 'travail');
+      renderCatsManager();
+      openModal('modal-cats');
+      setTimeout(() => document.getElementById('addcat-nom').focus(), 50);
+    };
+
+    /* À appeler après chaque changement de la liste des catégories. */
+    function applyCategories() {
+      categories = categories.filter(validCat).map(normCat);
+      catById = new Map(categories.map(c => [c.id, c]));
+      buildCatStyles();
+      if (!filterExists(state.filter)) state.filter = 'all';
+      if (!filterExists(notesListFilter)) notesListFilter = 'all';
+      if (!BASE_TYPES[selectedNoteType] && !catById.has(selectedNoteType)) selectedNoteType = 'autre';
+      renderFilters();
+      renderNlFilters();
+      renderTypePicker();
+      // fenêtre de gestion ouverte : on la redessine, sauf pendant une saisie
+      const mgr = document.getElementById('modal-cats');
+      const ae = document.activeElement;
+      const typing = ae && mgr.contains(ae) && ae.matches('input, select');
+      if (mgr.classList.contains('show') && !typing) renderCatsManager();
+    }
+    function refreshCatsManager() {
+      if (document.getElementById('modal-cats').classList.contains('show')) renderCatsManager();
+    }
+    applyCategories();
 
     window.resetPlanning = async function () {
       if (!confirm('Effacer toutes les notes ?\n\nC\'est définitif. Pensez à exporter (Excel) avant si vous voulez garder une copie.')) return;
@@ -3768,14 +4283,6 @@
         renderCalendar();
       });
     });
-    document.querySelectorAll('.filter-chip').forEach(c => {
-      c.addEventListener('click', () => {
-        document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
-        c.classList.add('active');
-        state.filter = c.dataset.filter;
-        renderCalendar();
-      });
-    });
     document.getElementById('cal-prev').addEventListener('click', () => navigatePeriod(-1));
     document.getElementById('cal-next').addEventListener('click', () => navigatePeriod(1));
     document.getElementById('btn-today').addEventListener('click', () => { state.currentDate = new Date(); renderCalendar(); });
@@ -3866,9 +4373,9 @@
             box.innerHTML = '<div class="it-head">' + dStr + '</div><div class="it-empty">Aucune note prévue aujourd\'hui — bonne journée ✨</div>';
           } else {
             const rows = list.slice(0, 4).map(function (n) {
-              const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+              const t = typeInfo(n.type);
               const time = n.heureDebut ? n.heureDebut : 'Journée';
-              return '<div class="it-row ' + n.type + '"><span class="it-time">' + time + '</span><span class="it-title">' + escapeHtml(n.titre) + '</span><span class="it-type">' + t.label + '</span></div>';
+              return '<div class="it-row ' + t.id + '"><span class="it-time">' + time + '</span><span class="it-title">' + escapeHtml(n.titre) + '</span><span class="it-type">' + escapeHtml(t.label) + '</span></div>';
             }).join('');
             const extra = list.length > 4 ? '<div class="it-more">+ ' + (list.length - 4) + ' autre' + (list.length - 4 > 1 ? 's' : '') + '</div>' : '';
             box.innerHTML = '<div class="it-head">' + dStr + ' &middot; ' + list.length + ' note' + (list.length > 1 ? 's' : '') + '</div>' + rows + extra;
@@ -3972,7 +4479,7 @@
       });
 
       sidebar.addEventListener('click', function (e) {
-        if (mq.matches && e.target.closest('.dim-btn, .filter-chip, #btn-today, #btn-date-jump, .sb-act, #btn-new-note')) openMobile(false);
+        if (mq.matches && e.target.closest('.dim-btn, .filter-chip, .filter-group-head, #btn-today, #btn-date-jump, .sb-act, #btn-new-note')) openMobile(false);
       });
     })();
 
@@ -3988,29 +4495,29 @@
     function getNotesForDate(d) {
       const s = ymd(d);
       return notes.filter(n => {
-        if (state.filter !== 'all' && n.type !== state.filter) return false;
+        if (!matchFilter(n, state.filter)) return false;
         return n.date === s;
       }).sort((a, b) => (a.heureDebut || '99:99').localeCompare(b.heureDebut || '99:99'));
     }
     function getNotesForMonth(year, month) {
       return notes.filter(n => {
-        if (state.filter !== 'all' && n.type !== state.filter) return false;
+        if (!matchFilter(n, state.filter)) return false;
         const parts = n.date.split('-').map(Number);
         return parts[0] === year && (parts[1] - 1) === month;
       });
     }
 
     function noteChip(n) {
-      const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+      const t = typeInfo(n.type);
       const time = n.heureDebut ? `<span class="nc-time">${n.heureDebut}${n.heureFin ? ' – ' + n.heureFin : ''}</span>` : '';
       const over = isOverdue(n);
-      let cls = n.type;
+      let cls = t.id;
       if (n.done) cls += ' done';
       else if (over) cls += ' overdue';
       else if (n.rappel) cls += ' rappel-on';
       const mark = n.done ? '✓ ' : (over ? '⚠ ' : (n.rappel ? '🔔 ' : ''));
       return `<span class="note-chip ${cls}" onclick="showNoteDetail(${n.id}); event.stopPropagation();" title="${escapeHtml(n.titre)}">
-    <span class="nc-type">${mark}${t.label}</span>
+    <span class="nc-type">${mark}${escapeHtml(t.label)}</span>
     <span class="nc-title">${escapeHtml(truncate(n.titre, 28))}</span>
     ${time}
   </span>`;
@@ -4058,9 +4565,9 @@
       ${isAdmin() ? '<div class="empty-sub">Cliquez sur « Nouvelle note » pour en ajouter une.</div>' : ''}</div>`;
       } else {
         body = `<div class="day-timeline">` + dayNotes.map((n, i) => {
-          const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+          const t = typeInfo(n.type);
           const over = isOverdue(n);
-          const cardCls = n.type + (n.done ? ' done' : (over ? ' overdue' : ''));
+          const cardCls = t.id + (n.done ? ' done' : (over ? ' overdue' : ''));
           const timeBlock = n.heureDebut
             ? `<div class="day-time">${n.heureDebut}${n.heureFin ? '<div class="day-time-sep">↓</div>' + n.heureFin : ''}</div>`
             : `<div class="day-time day-time-allday">Journée</div>`;
@@ -4070,7 +4577,7 @@
         <div>
           <div class="day-info-title">${escapeHtml(n.titre)}</div>
           <div class="day-info-meta">
-            <span class="type-tag ${n.type}">${t.label}</span>
+            <span class="type-tag ${t.id}">${escapeHtml(t.label)}</span>
             ${n.done ? '<span class="badge-done">Terminé</span>' : (over ? '<span class="badge-overdue">En retard</span>' : (n.rappel ? '<span class="badge-rappel">🔔 Rappel</span>' : ''))}
             ${m ? `<span class="amount-tag">${formatMontant(m)}</span>` : ''}
           </div>
@@ -4231,7 +4738,7 @@
     function showNoteDetail(id) {
       const n = notes.find(x => x.id === id);
       if (!n) return;
-      const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+      const t = typeInfo(n.type);
       document.getElementById('nd-eyebrow').textContent = t.label;
       document.getElementById('nd-title').textContent = n.titre;
 
@@ -4245,7 +4752,7 @@
       else if (over) statutHtml = '<span class="badge-overdue">En retard</span>';
 
       document.getElementById('nd-grid').innerHTML = `
-    <div class="detail-item"><div class="detail-label">Type</div><div class="detail-value"><span class="type-tag ${n.type}">${t.label}</span></div></div>
+    <div class="detail-item"><div class="detail-label">Type</div><div class="detail-value"><span class="type-tag ${t.id}">${escapeHtml(t.label)}</span></div></div>
     <div class="detail-item"><div class="detail-label">Horaire</div><div class="detail-value">${timeStr}</div></div>
     <div class="detail-item"><div class="detail-label">Statut</div><div class="detail-value">${statutHtml}</div></div>
     <div class="detail-item"><div class="detail-label">Montant</div><div class="detail-value">${m ? formatMontant(m) : '<span style="color:var(--gray-400)">—</span>'}</div></div>
@@ -4278,8 +4785,16 @@
        AJOUTER / MODIFIER NOTE
        ============================================================ */
     function selectNoteType(type) {
+      if (!BASE_TYPES[type] && !catById.has(type)) type = 'autre';
       selectedNoteType = type;
-      document.querySelectorAll('.type-option').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+      document.querySelectorAll('#type-picker-wrap .type-option').forEach(b => {
+        b.classList.toggle('active', b.dataset.type === type);
+        b.setAttribute('aria-pressed', b.dataset.type === type);
+      });
+      const panel = document.getElementById('newcat');
+      const show = type === 'autre';
+      if (show && panel.hidden) resetCatForm('newcat', 'autres');
+      panel.hidden = !show;
     }
 
     function toggleRappelInput() {
@@ -4309,18 +4824,18 @@
           '<div style="text-align:center;color:var(--gray-400);padding:22px 0">Aucune note pour cette journée.</div>';
       } else {
         document.getElementById('day-notes-list').innerHTML = list.map(n => {
-          const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+          const t = typeInfo(n.type);
           const time = n.heureDebut
             ? `<span class="reminder-time">${n.heureDebut}${n.heureFin ? ' – ' + n.heureFin : ''}</span>`
             : `<span class="reminder-time allday">Journée</span>`;
           const m = noteMontant(n);
           const montant = m ? ` · <span style="font-family:var(--font-mono);font-size:12px;color:#047857;font-weight:600">${m.toLocaleString('fr-FR')} FCFA</span>` : '';
           const mark = n.done ? '✓ ' : (isOverdue(n) ? '⚠ ' : (n.rappel ? '🔔 ' : ''));
-          return `<div class="reminder-item ${n.type}" onclick="closeModal('modal-day-notes'); showNoteDetail(${n.id});">
+          return `<div class="reminder-item ${t.id}" onclick="closeModal('modal-day-notes'); showNoteDetail(${n.id});">
         ${time}
         <div class="reminder-body">
           <div class="reminder-item-title">${mark}${escapeHtml(n.titre)}</div>
-          <span class="type-tag ${n.type}">${t.label}</span>${montant}
+          <span class="type-tag ${t.id}">${escapeHtml(t.label)}</span>${montant}
         </div>
       </div>`;
         }).join('');
@@ -4387,6 +4902,10 @@
       const dObj = new Date(date + 'T00:00:00');
       if (((dObj.getDay() + 6) % 7) === 6) { err.textContent = 'Impossible d\'ajouter une note un dimanche (jour de repos).'; err.classList.add('show'); return; }
       if (heureDebut && heureFin && heureFin < heureDebut) { err.textContent = 'L\'heure de fin doit être après l\'heure de début.'; err.classList.add('show'); return; }
+      // « Autre » avec un nom écrit : la nouvelle catégorie est créée (et gardée) avant la note
+      if (selectedNoteType === 'autre' && cleanCatNom(document.getElementById('newcat-nom').value)) {
+        if (!createCategoryFromForm('newcat')) return;
+      }
 
       if (editingNoteId) {
         const n = notes.find(x => x.id === editingNoteId);
@@ -4426,15 +4945,15 @@
       if (!list.length) return;
       document.getElementById('reminder-sub').textContent = `${list.length} note${list.length > 1 ? 's' : ''} prévue${list.length > 1 ? 's' : ''} ce ${new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
       document.getElementById('reminder-list').innerHTML = list.map(n => {
-        const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+        const t = typeInfo(n.type);
         const time = n.heureDebut
           ? `<span class="reminder-time">${n.heureDebut}</span>`
           : `<span class="reminder-time allday">Journée</span>`;
-        return `<div class="reminder-item ${n.type}" onclick="closeModal('modal-reminder'); showNoteDetail(${n.id});">
+        return `<div class="reminder-item ${t.id}" onclick="closeModal('modal-reminder'); showNoteDetail(${n.id});">
       ${time}
       <div class="reminder-body">
         <div class="reminder-item-title">${escapeHtml(n.titre)}</div>
-        <span class="type-tag ${n.type}">${t.label}</span>
+        <span class="type-tag ${t.id}">${escapeHtml(t.label)}</span>
       </div>
     </div>`;
       }).join('');
@@ -4515,7 +5034,7 @@
         const startMin = hmToMin(n.heureDebut);
         // Déclenche dans la minute où l'heure de la note arrive (pas pour les notes déjà passées à l'ouverture)
         if (nowMin >= startMin && nowMin - startMin <= 1) {
-          const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+          const t = typeInfo(n.type);
           try {
             new Notification(`${t.label} — ${n.heureDebut}`, { body: n.titre + (n.contenu ? '\n' + n.contenu : '') });
           } catch (e) { }
@@ -4530,6 +5049,8 @@
     function csvCell(val) {
       // Échappe une valeur pour le CSV : guillemets doublés, et entoure de "
       let s = String(val == null ? '' : val);
+      // Un texte commençant par = + - @ serait exécuté comme formule par Excel : on le neutralise
+      if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
       s = s.replace(/"/g, '""');
       return '"' + s + '"';
     }
@@ -4537,7 +5058,7 @@
     function exportCSV() {
       // Notes filtrées comme à l'écran, triées par date puis heure
       const list = notes
-        .filter(n => state.filter === 'all' || n.type === state.filter)
+        .filter(n => matchFilter(n, state.filter))
         .slice()
         .sort((a, b) => {
           if (a.date !== b.date) return a.date.localeCompare(b.date);
@@ -4548,17 +5069,20 @@
 
       // Séparateur point-virgule : Excel francophone l'attend par défaut
       const SEP = ';';
-      const entete = ['Date', 'Heure début', 'Heure fin', 'Type', 'Titre', 'Contenu'];
+      const entete = ['Date', 'Heure début', 'Heure fin', 'Groupe', 'Catégorie', 'Titre', 'Contenu', 'Montant (FCFA)', 'Statut'];
 
       const lignes = list.map(n => {
-        const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+        const t = typeInfo(n.type);
         return [
           n.date,
           n.heureDebut || '',
           n.heureFin || '',
+          groupeLabel(t.groupe),
           t.label,
           n.titre || '',
-          (n.contenu || '').replace(/\n/g, ' ')   // une note sur une seule ligne
+          (n.contenu || '').replace(/\n/g, ' '),   // une note sur une seule ligne
+          noteMontant(n) ? String(noteMontant(n)).replace('.', ',') : '',
+          n.done ? 'Terminé' : (isOverdue(n) ? 'En retard' : 'À faire')
         ].map(csvCell).join(SEP);
       });
 
@@ -4587,15 +5111,14 @@
       notesListFilter = 'all';
       notesListSearch = '';
       document.getElementById('nl-search').value = '';
-      document.querySelectorAll('.nl-filter').forEach(b => b.classList.toggle('active', b.dataset.f === 'all'));
+      renderNlFilters();
       renderNotesList();
       openModal('modal-notes-list');
     }
 
-    function setNotesListFilter(f, btn) {
-      notesListFilter = f;
-      document.querySelectorAll('.nl-filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    function setNotesListFilter(f) {
+      notesListFilter = filterExists(f) ? f : 'all';
+      renderNlFilters();
       renderNotesList();
     }
 
@@ -4607,7 +5130,7 @@
     function renderNotesList() {
       const q = notesListSearch;
       const list = notes
-        .filter(n => notesListFilter === 'all' || n.type === notesListFilter)
+        .filter(n => matchFilter(n, notesListFilter))
         .filter(n => !q || (n.titre || '').toLowerCase().includes(q) || (n.contenu || '').toLowerCase().includes(q))
         .slice()
         .sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : (a.heureDebut || '99:99').localeCompare(b.heureDebut || '99:99'));
@@ -4616,7 +5139,7 @@
       const body = document.getElementById('nl-body');
       const statsEl = document.getElementById('nl-stats');
       sub.textContent = `${list.length} note${list.length > 1 ? 's' : ''}`
-        + (notesListFilter !== 'all' ? ` · ${NOTE_TYPES[notesListFilter].label}` : '')
+        + (notesListFilter !== 'all' ? ` · ${filterLabel(notesListFilter)}` : '')
         + (q ? ` · recherche : « ${q} »` : '');
 
       // Totaux
@@ -4641,9 +5164,9 @@
           lastDate = n.date;
           html += `<div class="nl-date-head">${formatDate(n.date)}</div>`;
         }
-        const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+        const t = typeInfo(n.type);
         const over = isOverdue(n);
-        const rowCls = n.type + (n.done ? ' done' : (over ? ' overdue' : ''));
+        const rowCls = t.id + (n.done ? ' done' : (over ? ' overdue' : ''));
         const time = n.heureDebut
           ? `<span class="nl-time">${n.heureDebut}${n.heureFin ? '–' + n.heureFin : ''}</span>`
           : `<span class="nl-time allday">Journée</span>`;
@@ -4653,7 +5176,7 @@
       ${time}
       <div class="nl-row-body">
         <div class="nl-row-title">${escapeHtml(n.titre)}</div>
-        <span class="type-tag ${n.type}">${t.label}</span> ${badge}
+        <span class="type-tag ${t.id}">${escapeHtml(t.label)}</span> ${badge}
       </div>
       ${m ? `<span class="nl-row-amount">${formatMontant(m)}</span>` : ''}
     </div>`;
@@ -4709,7 +5232,7 @@
             lastDate = n.date;
             rows += `<tr class="dhead"><td colspan="5">${formatDate(n.date)}</td></tr>`;
           }
-          const t = NOTE_TYPES[n.type] || NOTE_TYPES.autre;
+          const t = typeInfo(n.type);
           const time = n.heureDebut ? (n.heureDebut + (n.heureFin ? '–' + n.heureFin : '')) : '—';
           const statut = n.done ? 'Terminé' : (isOverdue(n) ? 'En retard' : 'À faire');
           const stCls = n.done ? 'st-done' : (isOverdue(n) ? 'st-late' : '');
@@ -4717,7 +5240,7 @@
           rows += `<tr>
         <td class="c-time">${time}</td>
         <td><strong>${escapeHtml(n.titre)}</strong>${n.contenu ? '<div class="c-note">' + escapeHtml(n.contenu).replace(/\n/g, '<br>') + '</div>' : ''}</td>
-        <td>${t.label}</td>
+        <td>${escapeHtml(t.label)}</td>
         <td class="c-amount">${m ? m.toLocaleString('fr-FR') + ' FCFA' : ''}</td>
         <td class="c-statut ${stCls}">${statut}</td>
       </tr>`;
@@ -4756,7 +5279,7 @@
     <div class="scope">${scopeLabel} — ${titre}</div>
     <div class="meta">${list.length} note(s) · Imprimé le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</div>
     <table>
-      <thead><tr><th>Heure</th><th>Note</th><th>Type</th><th>Montant</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Heure</th><th>Note</th><th>Catégorie</th><th>Montant</th><th>Statut</th></tr></thead>
       <tbody>${rows}</tbody>
       ${totalMontant ? '<tfoot><tr><td colspan="3">Total des montants</td><td class="total">' + totalMontant.toLocaleString('fr-FR') + ' FCFA</td><td></td></tr></tfoot>' : ''}
     </table>

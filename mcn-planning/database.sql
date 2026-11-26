@@ -24,7 +24,7 @@ USE `mcn_daloa`;
 CREATE TABLE IF NOT EXISTS `notes` (
   `id`          INT UNSIGNED NOT NULL,                 -- identifiant de la note (genere par la page)
   `type`        VARCHAR(20)  NOT NULL DEFAULT 'commande',
-                                                       -- 'commande' | 'cheque' | 'rendezvous' | 'autre'
+                                                       -- 'commande' | 'cheque' | 'rendezvous' | 'autre' | 'cat_...'
   `titre`       VARCHAR(255) NOT NULL,                 -- 1re ligne de la note
   `contenu`     TEXT         NULL,                     -- reste du texte (optionnel)
   `date`        DATE         NOT NULL,                 -- jour de la note (AAAA-MM-JJ)
@@ -39,4 +39,17 @@ CREATE TABLE IF NOT EXISTS `notes` (
   PRIMARY KEY (`id`),
   KEY `idx_date` (`date`),                             -- recherche rapide par jour/mois
   KEY `idx_type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 4) Categories personnalisees (bouton "Autre" -> nouvelle categorie permanente).
+--    Rangees par groupe : 'travail' | 'domestique' | 'autres'.
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id`          VARCHAR(20)  NOT NULL,                 -- 'cat_xxxxxxxx' (genere par la page)
+  `nom`         VARCHAR(40)  NOT NULL,                 -- nom affiche (ex. 'Facture', 'Courses')
+  `groupe`      VARCHAR(12)  NOT NULL DEFAULT 'autres',
+  `couleur`     CHAR(7)      NOT NULL DEFAULT '#475569',
+  `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

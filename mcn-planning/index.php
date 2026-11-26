@@ -11,6 +11,13 @@ require __DIR__ . '/config.php';
 header('X-Frame-Options: SAMEORIGIN');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: same-origin');
+/* Politique de contenu : la page ne peut charger que ses propres fichiers
+   (+ les polices Google) et ne parler qu'a son propre serveur. */
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; "
+     . "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+     . "img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; "
+     . "form-action 'self'; frame-ancestors 'self'");
+header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
 
 /* Verrouiller (redemander le mot de passe) : index.php?deconnexion */
 if (isset($_GET['deconnexion'])) {

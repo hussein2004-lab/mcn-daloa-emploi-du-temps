@@ -9,6 +9,8 @@
             corps JSON { "upsert": [note, ...], "delete": [id, ...] }
             -> seules les notes modifiees / supprimees sont touchees : deux
                personnes peuvent travailler en meme temps sans s'effacer.
+            + (facultatif) "cat_upsert": [categorie, ...], "cat_delete": [id, ...]
+               pour les categories personnalisees (Travail / Domestique / Autres).
      - TOUT REMPLACER (bouton Reinitialiser) : POST api.php?action=save
             corps JSON { "notes": [...] }
    Toutes les reponses sont au format JSON.
@@ -19,6 +21,7 @@ require __DIR__ . '/config.php';
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
+header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
 
 /* Petite fonction pour repondre en JSON puis arreter le script. */
 function respond(array $data, int $http = 200): void
@@ -28,9 +31,42 @@ function respond(array $data, int $http = 200): void
     exit;
 }
 
-/* Les 4 seuls types de note autorises. */
+/* Les 4 types de base. Les categories personnalisees ont un id "cat_xxxx". */
 const TYPES_VALIDES = ['commande', 'cheque', 'rendezvous', 'autre'];
+const CAT_ID_REGEX  = '/^cat_[a-z0-9]{6,12}$/';
+const GROUPES       = ['travail', 'domestique', 'autres'];
+/* Couleurs proposees dans la page (memes valeurs que PALETTE dans index.html). */
+const COULEURS      = ['#e11d48', '#ea580c', '#ca8a04', '#65a30d', '#0d9488', '#0891b2',
+                       '#4f46e5', '#c026d3', '#db2777', '#475569'];
+const CATEGORIES_MAX = 200;
 const ID_MAX = 4294967295;   // limite d'un INT UNSIGNED
+
+/* Verifie et nettoie une categorie recue. Renvoie null si elle est inutilisable. */
+function clean_cat($c): ?array
+{
+    if (!is_array($c)) {
+        return null;
+    }
+    $id = (string) ($c['id'] ?? '');
+    if (!preg_match(CAT_ID_REGEX, $id)) {
+        return null;
+    }
+    /* Nom : texte simple, sans caracteres de controle, 1 a 40 caracteres. */
+    $nom = trim(preg_replace('/[\x00-\x1F\x7F]+/u', ' ', (string) ($c['nom'] ?? '')) ?? '');
+    $nom = preg_replace('/\s+/u', ' ', $nom) ?? '';
+    if ($nom === '' || mb_strlen($nom) > 40) {
+        return null;
+    }
+    $groupe = (string) ($c['groupe'] ?? 'autres');
+    if (!in_array($groupe, GROUPES, true)) {
+        $groupe = 'autres';
+    }
+    $couleur = strtolower((string) ($c['couleur'] ?? ''));
+    if (!in_array($couleur, COULEURS, true)) {
+        $couleur = '#475569';
+    }
+    return [':id' => $id, ':nom' => $nom, ':groupe' => $groupe, ':couleur' => $couleur];
+}
 
 /* Verifie et nettoie une note recue. Renvoie null si elle est inutilisable. */
 function clean_note($n): ?array
@@ -51,7 +87,7 @@ function clean_note($n): ?array
         return null;                                   // date invalide = ignoree
     }
     $type = (string) ($n['type'] ?? 'autre');
-    if (!in_array($type, TYPES_VALIDES, true)) {
+    if (!in_array($type, TYPES_VALIDES, true) && !preg_match(CAT_ID_REGEX, $type)) {
         $type = 'autre';
     }
     $contenu = trim((string) ($n['contenu'] ?? ''));
@@ -83,6 +119,15 @@ function json_body(): array
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST'
         || stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== 0) {
         respond(['ok' => false, 'error' => 'Requete invalide.'], 400);
+    }
+    /* Une ecriture doit venir de la page elle-meme, pas d'un autre site. */
+    $origine = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origine !== '') {
+        $hoteOrigine = strtolower((string) parse_url($origine, PHP_URL_HOST));
+        $hoteSite    = strtolower(explode(':', (string) ($_SERVER['HTTP_HOST'] ?? ''))[0]);
+        if ($hoteOrigine === '' || $hoteOrigine !== $hoteSite) {
+            respond(['ok' => false, 'error' => 'Origine refusee.'], 403);
+        }
     }
     $input = json_decode((string) file_get_contents('php://input'), true);
     if (!is_array($input)) {
@@ -134,7 +179,10 @@ try {
                 'done'       => (bool) $r['done'],
             ];
         }
-        respond(['ok' => true, 'notes' => $notes]);
+        $categories = $pdo->query(
+            'SELECT id, nom, groupe, couleur FROM categories ORDER BY nom ASC'
+        )->fetchAll();
+        respond(['ok' => true, 'notes' => $notes, 'categories' => $categories]);
     }
 
     /* ---- ENREGISTRER les changements (note par note) --------------------- */
@@ -142,8 +190,36 @@ try {
         $input  = json_body();
         $upsert = is_array($input['upsert'] ?? null) ? $input['upsert'] : [];
         $delete = is_array($input['delete'] ?? null) ? $input['delete'] : [];
+        $catUp  = is_array($input['cat_upsert'] ?? null) ? $input['cat_upsert'] : [];
+        $catDel = is_array($input['cat_delete'] ?? null) ? $input['cat_delete'] : [];
+        if (count($upsert) + count($delete) > 5000 || count($catUp) + count($catDel) > CATEGORIES_MAX) {
+            respond(['ok' => false, 'error' => 'Trop de changements en une fois.'], 413);
+        }
 
         $pdo->beginTransaction();
+
+        /* 1) Categories creees / modifiees (avant les notes qui les utilisent). */
+        $catSaved = [];
+        $insCat = $pdo->prepare('INSERT INTO categories (id, nom, groupe, couleur)
+             VALUES (:id, :nom, :groupe, :couleur)
+             ON DUPLICATE KEY UPDATE nom = VALUES(nom), groupe = VALUES(groupe), couleur = VALUES(couleur)');
+        $nbCat = (int) $pdo->query('SELECT COUNT(*) FROM categories')->fetchColumn();
+        $existe = $pdo->prepare('SELECT 1 FROM categories WHERE id = ?');
+        foreach ($catUp as $c) {
+            $row = clean_cat($c);
+            if ($row === null) {
+                continue;
+            }
+            $existe->execute([$row[':id']]);
+            $nouvelle = $existe->fetchColumn() === false;
+            if ($nouvelle && $nbCat >= CATEGORIES_MAX) {
+                continue;                                  // limite atteinte : ignoree
+            }
+            $insCat->execute($row);
+            $nbCat += $nouvelle ? 1 : 0;
+            $catSaved[] = $row[':id'];
+        }
+
         $ins = $pdo->prepare(SQL_INSERT . '
              ON DUPLICATE KEY UPDATE
                 type = VALUES(type), titre = VALUES(titre), contenu = VALUES(contenu),
@@ -168,8 +244,21 @@ try {
                 $deleted[] = $id;
             }
         }
+        /* 2) Categories supprimees : leurs notes passent en "Autre". */
+        $catDeleted = [];
+        $delCat   = $pdo->prepare('DELETE FROM categories WHERE id = ?');
+        $moveNote = $pdo->prepare("UPDATE notes SET type = 'autre' WHERE type = ?");
+        foreach ($catDel as $id) {
+            $id = (string) $id;
+            if (preg_match(CAT_ID_REGEX, $id)) {
+                $delCat->execute([$id]);
+                $moveNote->execute([$id]);
+                $catDeleted[] = $id;
+            }
+        }
         $pdo->commit();
-        respond(['ok' => true, 'saved' => $saved, 'deleted' => $deleted]);
+        respond(['ok' => true, 'saved' => $saved, 'deleted' => $deleted,
+                 'cat_saved' => $catSaved, 'cat_deleted' => $catDeleted]);
     }
 
     /* ---- TOUT REMPLACER (utilise par "Reinitialiser") -------------------- */

@@ -35,7 +35,9 @@ PHP 8 · MySQL / MariaDB · HTML + JavaScript sans framework · aucune dépendan
 | | |
 |---|---|
 | 🗓️ **4 vues de calendrier** | Jour, Semaine, Mois et An, avec navigation et « Aller au » une date précise. |
-| 🎨 **4 types de notes** | Commande, Chèque, Rendez-vous et Autre, chacun avec sa couleur et un filtre dédié. |
+| 🎨 **Catégories** | Commande, Chèque, Rendez-vous et Autre, chacune avec sa couleur et un filtre dédié. |
+| ➕ **Catégories personnalisées** | En choisissant « Autre », on écrit une nouvelle catégorie (nom, groupe, couleur) : elle reste ensuite dans la liste. Renommer, changer de groupe ou de couleur, supprimer : ⚙ **Gérer les catégories**. Les notes d'une catégorie supprimée passent dans « Autre », rien n'est effacé. |
+| 🗂️ **Groupes** | Les catégories sont rangées par **Travail**, **Domestique** et **Autres** — dans le choix de la catégorie, les filtres et la liste des notes. Un clic sur un groupe filtre toutes ses catégories. |
 | 💰 **Montants en FCFA** | Montant par note, et totaux automatiques (total, en attente, terminées) dans la liste des notes. |
 | ✅ **Suivi** | Notes « terminées » barrées, notes en retard signalées en rouge. |
 | 🔔 **Rappel** | Une note en rappel non terminée avance d'elle-même au jour actuel (le dimanche est un jour de repos). |
@@ -70,6 +72,9 @@ L'application est pensée pour **une seule personne** : pas de comptes, **un seu
 - **Fermé par défaut** : sans mot de passe configuré, le planning ne s'ouvre que sur l'ordinateur lui-même (`localhost`). Un site mis en ligne sans mot de passe affiche « Site non configuré » au lieu des notes.
 - **Fichiers sensibles bloqués** (`.htaccess`) : configuration, script SQL et page interne ne sont jamais servis directement.
 - **Base de données** : requêtes préparées PDO (pas d'injection SQL), cookie de session `HttpOnly` + `SameSite=Strict`, en-têtes de sécurité, pages non indexées par les moteurs de recherche.
+- **Écritures protégées** : l'API n'accepte que du JSON envoyé par la page elle-même (contrôle de l'en-tête `Origin`), et vérifie chaque valeur (identifiants, groupe, couleur parmi une liste fixe, nom de 40 caractères max).
+- **Politique de contenu (CSP)** : la page ne peut charger que ses propres fichiers (et les polices Google) et ne parler qu'à son propre serveur. Les textes saisis (notes, catégories) sont toujours affichés comme du texte, jamais comme du code.
+- **Export Excel sûr** : une cellule commençant par `=`, `+`, `-` ou `@` est neutralisée pour ne pas être exécutée comme formule.
 
 ## Installation sur votre ordinateur (XAMPP)
 
@@ -115,13 +120,13 @@ Il peut aussi être placé **un dossier au-dessus du site**, sous le nom `mcn-co
 Navigateur ──► index.php ──(mot de passe OK)──► index.html (calendrier + JavaScript)
                                                      │
                                                      ▼
-                                    api.php ◄──► MySQL (table « notes »)
+                                    api.php ◄──► MySQL (tables « notes » et « categories »)
 ```
 
 | Appel | Rôle |
 |---|---|
-| `GET api.php?action=list` | Renvoie toutes les notes. |
-| `POST api.php?action=sync` | Enregistre des changements **note par note** : `{ "upsert": [note…], "delete": [id…] }`. |
+| `GET api.php?action=list` | Renvoie toutes les notes et les catégories personnalisées. |
+| `POST api.php?action=sync` | Enregistre des changements **note par note** : `{ "upsert": [note…], "delete": [id…], "cat_upsert": [catégorie…], "cat_delete": [id…] }`. |
 | `POST api.php?action=save` | Remplace toutes les notes (réinitialisation). |
 | `GET api.php?action=ping` | Test de santé. |
 

@@ -85,6 +85,17 @@ function db(): PDO
         KEY `idx_type` (`type`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
+    /* Categories personnalisees (creees avec "Autre" -> nouvelle categorie). */
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `categories` (
+        `id`          VARCHAR(20)  NOT NULL,
+        `nom`         VARCHAR(40)  NOT NULL,
+        `groupe`      VARCHAR(12)  NOT NULL DEFAULT 'autres',
+        `couleur`     CHAR(7)      NOT NULL DEFAULT '#475569',
+        `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
     return $pdo;
 }
 
